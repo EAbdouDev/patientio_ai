@@ -1,4 +1,4 @@
-import serviceAccount from "@firebase/serviceAccount.json";
+// import serviceAccount from "@firebase/serviceAccount.json";
 import { initializeApp } from "firebase-admin";
 import { ServiceAccount, cert, getApps } from "firebase-admin/app";
 import { Firestore, getFirestore } from "firebase-admin/firestore";
@@ -17,13 +17,10 @@ try {
         process.env.NEXT_PUBLIC_EMULATOR_FIRESTORE_PATH!;
       process.env["FIRESTORE_AUTH_EMULATOR_HOST"] =
         process.env.NEXT_PUBLIC_EMULATOR_AUTH_PATH!;
-
-      serviceAccountVar = serviceAccount;
-    } else {
-      serviceAccountVar = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT as string
-      ) as ServiceAccount;
     }
+    serviceAccountVar = JSON.parse(
+      process.env.FIREBASE_SERVICE_ACCOUNT as string
+    ) as ServiceAccount;
 
     const app = initializeApp({
       credential: cert(serviceAccountVar as ServiceAccount),
