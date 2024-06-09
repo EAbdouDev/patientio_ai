@@ -8,6 +8,8 @@ let firestore: Firestore | undefined = undefined;
 let auth: Auth | undefined = undefined;
 const currentApps = getApps();
 
+let serviceAccountVar;
+
 try {
   if (currentApps.length === 0) {
     if (process.env.NEXT_PUBLIC_APP_ENV === "emulator") {
@@ -15,10 +17,16 @@ try {
         process.env.NEXT_PUBLIC_EMULATOR_FIRESTORE_PATH!;
       process.env["FIRESTORE_AUTH_EMULATOR_HOST"] =
         process.env.NEXT_PUBLIC_EMULATOR_AUTH_PATH!;
+
+      serviceAccountVar = serviceAccount;
+    } else {
+      serviceAccountVar = JSON.parse(
+        process.env.FIREBASE_SERVICE_ACCOUNT as string
+      ) as ServiceAccount;
     }
 
     const app = initializeApp({
-      credential: cert(serviceAccount as ServiceAccount),
+      credential: cert(serviceAccountVar as ServiceAccount),
     });
 
     firestore = getFirestore(app);
